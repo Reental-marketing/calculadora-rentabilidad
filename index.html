@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Calculadora de inversión — Reental</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="calculator">
+    <p class="overline">Rendimientos generados</p>
+
+    <header class="hero">
+      <h1 id="headline"><span id="headline-amount">10.000 €</span> durante <span id="headline-years">3 años</span></h1>
+    </header>
+
+    <div class="controls">
+      <div class="amount-field">
+        <label for="amount-input">Dinero a invertir</label>
+        <div class="amount-box">
+          <input id="amount-input" type="text" inputmode="decimal" value="10.000" autocomplete="off" aria-describedby="amount-error">
+          <span class="currency">€</span>
+        </div>
+        <p id="amount-error" class="input-error" hidden>Introduce un importe entre 1 y 99.999.999 €.</p>
+      </div>
+      <div class="period-field">
+        <span class="field-label" id="period-label">Periodo</span>
+        <div class="period-tabs" role="tablist" aria-labelledby="period-label" id="period-tabs">
+          <button type="button" role="tab" class="qb" data-years="1">1 año</button>
+          <button type="button" role="tab" class="qb active" data-years="3" aria-selected="true">3 años</button>
+          <button type="button" role="tab" class="qb" data-years="5">5 años</button>
+          <button type="button" role="tab" class="qb" data-years="10">10 años</button>
+        </div>
+      </div>
+    </div>
+
+    <section id="cards" class="cards" aria-live="polite"></section>
+
+    <section class="table-section">
+      <div class="section-head">
+        <h2>Evolución de los rendimientos</h2>
+        <span class="section-note">Solo ganancia · sin capital inicial</span>
+      </div>
+      <div class="table-scroll">
+        <table id="gains-table">
+          <thead>
+            <tr>
+              <th scope="col">Alternativa</th>
+              <th scope="col">1 año</th>
+              <th scope="col">3 años</th>
+              <th scope="col">5 años</th>
+              <th scope="col">10 años</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <div class="section-head">
+        <h2>Evolución del capital total</h2>
+        <span class="section-note">Capital inicial + rendimientos</span>
+      </div>
+      <div class="chart-box">
+        <canvas id="chart" aria-label="Gráfica comparativa de evolución de la inversión" role="img"></canvas>
+      </div>
+    </section>
+
+    <p class="disclaimer">Estimaciones basadas en rentabilidades históricas/medias. No constituyen rentabilidad garantizada ni asesoramiento financiero.</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.js"></script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
