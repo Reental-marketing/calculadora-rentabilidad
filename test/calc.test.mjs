@@ -36,7 +36,14 @@ test('mergeRates aplica válidos y descarta inválidos', () => {
   assert.equal(merged.oro, 7);             // inválido → default
   assert.equal(merged.rentaVariable, 7.5); // ausente → default
   assert.equal(merged.indexado, 10);       // ausente → default
+  assert.equal(merged.alquiler, 6.25);     // ausente → default
   assert.equal('extra' in merged, false);  // claves desconocidas ignoradas
+});
+
+test('alquiler tradicional: rentabilidad bruta 6,25 % compuesta', () => {
+  assert.equal(calc.DEFAULT_RATES.alquiler, 6.25);
+  assert.equal(calc.calculate(10000, 6.25, 1).toFixed(2), '10625.00');
+  assert.equal(calc.calculate(10000, 6.25, 10).toFixed(2), '18335.36');
 });
 
 test('mergeRates con null o no-objeto devuelve defaults', () => {

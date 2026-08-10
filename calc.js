@@ -9,6 +9,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   var DEFAULT_RATES = {
     reental: 16.25,
+    alquiler: 6.25,
     rentaFija: 3,
     rentaVariable: 7.5,
     oro: 7,

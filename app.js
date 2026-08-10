@@ -15,6 +15,7 @@ var CONFIG = {
 /* Colores de la paleta de marca Reental (ver :root en styles.css) */
 var ASSETS = [
   { key: 'reental',       label: 'Reental',        color: '#FCA311', highlight: true },
+  { key: 'alquiler',      label: 'Alquiler tradicional', color: '#4ADE80' },
   { key: 'rentaFija',     label: 'Renta fija',     color: '#9CA3AF' },
   { key: 'rentaVariable', label: 'Renta variable', color: '#A78BFA' },
   { key: 'oro',           label: 'Oro',            color: '#FFEABB' },

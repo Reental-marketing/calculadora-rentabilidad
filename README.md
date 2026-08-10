@@ -9,7 +9,8 @@ Reental frente a renta fija, renta variable, oro y fondo indexado, a 1, 3, 5 y
 1. Abre el Google Sheet de configuración: **(enlace pendiente — ver
    "Configuración inicial del Sheet")**.
 2. Edita la columna `porcentaje` de la fila del activo que quieras cambiar.
-   - Claves válidas: `reental`, `rentaFija`, `rentaVariable`, `oro`, `indexado`.
+   - Claves válidas: `reental`, `alquiler`, `rentaFija`, `rentaVariable`, `oro`,
+     `indexado`.
    - Valores entre 0 y 100. Vale punto o coma decimal (`16.25` o `16,25`).
 3. Los cambios tardan **hasta ~5 minutos** en verse (caché de publicación de
    Google). No hace falta redeploy ni tocar código.
@@ -33,6 +34,7 @@ Edita `DEFAULT_RATES` en `calc.js`:
 ```js
 var DEFAULT_RATES = {
   reental: 16.25,
+  alquiler: 6.25,
   rentaFija: 3,
   rentaVariable: 7.5,
   oro: 7,
