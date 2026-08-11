@@ -100,16 +100,20 @@ function renderTable(amount) {
 }
 
 function renderChart(amount) {
+  /* La gráfica muestra el rendimiento acumulado (sin capital inicial), la misma
+     magnitud que las tarjetas y la tabla, y resalta el periodo seleccionado. */
   var datasets = ASSETS.map(function (asset) {
     var rate = state.rates[asset.key];
     return {
       label: asset.label,
-      data: CHART_YEARS.map(function (y) { return ReentalCalc.calculate(amount, rate, y); }),
+      data: CHART_YEARS.map(function (y) { return gain(amount, rate, y); }),
       borderColor: asset.color,
       backgroundColor: asset.color,
       borderWidth: asset.highlight ? 3 : 1.5,
-      pointRadius: 0,
-      pointHoverRadius: 4,
+      pointRadius: CHART_YEARS.map(function (y) { return y === state.years ? 5 : 0; }),
+      pointBorderColor: '#0B1220',
+      pointBorderWidth: 2,
+      pointHoverRadius: 5,
       tension: 0.25,
     };
   });
@@ -150,7 +154,7 @@ function renderChart(amount) {
           titleFont: { family: 'Fustat', size: 11, weight: '700' },
           bodyFont: { family: 'Fustat', size: 12.5, weight: '600' },
           callbacks: {
-            label: function (ctx) { return ctx.dataset.label + ': ' + euroFmt.format(ctx.parsed.y); },
+            label: function (ctx) { return ctx.dataset.label + ': +' + euroFmt.format(ctx.parsed.y); },
           },
         },
       },

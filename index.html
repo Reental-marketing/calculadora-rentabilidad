@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
   <main class="calculator">
@@ -42,8 +42,8 @@
 
     <section class="table-section">
       <div class="section-head">
-        <h2>Evolución de los rendimientos</h2>
-        <span class="section-note">Solo ganancia · sin capital inicial</span>
+        <h2>Rendimiento por periodo</h2>
+        <span class="section-note">Ganancia acumulada · sin capital inicial</span>
       </div>
       <div class="table-scroll">
         <table id="gains-table">
@@ -63,8 +63,8 @@
 
     <section class="chart-section">
       <div class="section-head">
-        <h2>Evolución del capital total</h2>
-        <span class="section-note">Capital inicial + rendimientos</span>
+        <h2>Evolución año a año</h2>
+        <span class="section-note">Ganancia acumulada · sin capital inicial</span>
       </div>
       <div class="chart-box">
         <canvas id="chart" aria-label="Gráfica comparativa de evolución de la inversión" role="img"></canvas>
@@ -75,7 +75,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.js"></script>
-  <script src="calc.js?v=2"></script>
-  <script src="app.js?v=2"></script>
+  <script src="calc.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
