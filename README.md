@@ -1,8 +1,15 @@
 # Calculadora de inversión Reental
 
 Calculadora estática que compara el crecimiento estimado de una inversión en
-Reental frente a renta fija, renta variable, oro y fondo indexado, a 1, 3, 5 y
-10 años (interés compuesto). Pensada para embeberse como iframe en reental.co.
+Reental frente a alquiler tradicional, renta fija, renta variable, oro y fondo
+indexado, a 1, 3, 5 y 10 años (interés compuesto). Pensada para embeberse como
+iframe en reental.co.
+
+El flujo está pensado para inversores de cualquier nivel: primero se pregunta
+importe y plazo, y el resultado se muestra siempre como una comparativa visual
+(barras) frente a las alternativas, no como una cifra aislada. Diseño en light
+mode con la paleta e iconografía de marca Reental (sin dependencias de iconos
+externos: `icons.js` contiene el logo y los iconos en SVG inline).
 
 ## Cómo cambiar los porcentajes (admin)
 
@@ -17,6 +24,9 @@ Reental frente a renta fija, renta variable, oro y fondo indexado, a 1, 3, 5 y
 
 Si el Sheet no responde o un valor no es válido, la calculadora usa los valores
 por defecto definidos en `calc.js` (`DEFAULT_RATES`).
+
+Las cifras de la franja de confianza ("+110M tokenizados", "43K usuarios
+registrados") se actualizan en `TRUST_STATS`, al principio de `app.js`.
 
 ## Configuración inicial del Sheet (una sola vez)
 
