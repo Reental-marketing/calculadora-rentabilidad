@@ -34,7 +34,6 @@ var TRUST_STATS = [
 ];
 
 var TABLE_YEARS = [1, 3, 5, 10];
-var CHART_YEARS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 var euroFmt = new Intl.NumberFormat('es-ES', {
   style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
@@ -44,7 +43,7 @@ var pctFmt = new Intl.NumberFormat('es-ES', {
   minimumFractionDigits: 0, maximumFractionDigits: 2,
 });
 
-var state = { rates: ReentalCalc.DEFAULT_RATES, years: 3, chart: null, chartOpen: false };
+var state = { rates: ReentalCalc.DEFAULT_RATES, years: 3 };
 
 function parseAmount(str) {
   var cleaned = String(str).replace(/[€\s.]/g, '').replace(',', '.');
@@ -97,7 +96,7 @@ function computeResults(amount, years) {
 /* ---- Iconos estáticos (cabecera, CTA, franja de confianza) ---- */
 function renderStaticIcons() {
   document.getElementById('cta-arrow').innerHTML = ReentalIcons.icon('arrow');
-  document.getElementById('toggle-chevron').innerHTML = ReentalIcons.icon('chevron');
+  document.getElementById('cta-arrow-2').innerHTML = ReentalIcons.icon('arrow');
   document.getElementById('step1-arrow').innerHTML = ReentalIcons.icon('arrow');
 
   TRUST_STATS.forEach(function (stat, i) {
@@ -132,148 +131,60 @@ function renderHero(amount, years, results) {
   }
 }
 
-/* ---- Barras comparativas (visual principal) ---- */
-function renderBars(amount, years, results) {
-  var sorted = results.slice().sort(function (a, b) { return b.gain - a.gain; });
-  var max = Math.max(sorted[0] ? sorted[0].gain : 1, 1);
-  var el = document.getElementById('bars');
+/* ---- Comparativa por plazo (identidad + tabla de interés compuesto) ---- */
+var PERIOD_LABELS = { 1: '1 año', 3: '3 años', 5: '5 años', 10: '10 años' };
 
+function renderCompare(amount, years, results) {
+  /* Orden de mayor a menor rentabilidad media. Como el interés compuesto es
+     monótono en la tasa (a más % siempre más ganancia, en cualquier
+     plazo > 0), este orden es el mismo para los 4 plazos a la vez, así
+     que basta con ordenar una vez por tasa. */
+  var sorted = results.slice().sort(function (a, b) { return b.rate - a.rate; });
+  var maxRate = Math.max.apply(null, sorted.map(function (r) { return r.rate; }));
+
+  var el = document.getElementById('compare-rows');
   el.innerHTML = sorted.map(function (r) {
     var isBrand = r.key === 'reental';
     var iconHtml = isBrand ? ReentalIcons.brandMark(22) : ReentalIcons.icon(r.icon);
-    var iconClass = 'bar-icon';
     var fillBg = isBrand ? 'var(--grad)' : r.ink;
-    var pct = Math.max((r.gain / max) * 100, 2);
+    var ratePct = Math.max((r.rate / maxRate) * 100, 4);
+
+    var periods = TABLE_YEARS.map(function (y) {
+      var value = gain(amount, r.rate, y);
+      return (
+        '<div class="compare-period' + (y === years ? ' is-selected' : '') + '">' +
+          '<span class="compare-period-label">' + PERIOD_LABELS[y] + '</span>' +
+          '<span class="compare-period-value">+' + euroFmt.format(value) + '</span>' +
+        '</div>'
+      );
+    }).join('');
+
     return (
-      '<div class="bar-row' + (r.highlight ? ' highlight' : '') + '">' +
-        '<div class="bar-head">' +
-          '<span class="' + iconClass + '" style="--tint:' + r.tint + ';--ink:' + r.ink + '">' + iconHtml + '</span>' +
-          '<div class="bar-info">' +
-            '<p class="bar-name">' + r.label +
-              (r.highlight ? '<span class="bar-badge">Mejor rentabilidad</span>' : '') + '</p>' +
-            '<p class="bar-rate">' + pctFmt.format(r.rate) + ' % anual</p>' +
+      '<div class="compare-row' + (r.highlight ? ' highlight' : '') + '">' +
+        '<div class="compare-id">' +
+          '<span class="compare-icon" style="--tint:' + r.tint + ';--ink:' + r.ink + '">' + iconHtml + '</span>' +
+          '<div class="compare-info">' +
+            '<p class="compare-name">' + r.label +
+              (r.highlight ? '<span class="compare-badge">Mejor rentabilidad</span>' : '') + '</p>' +
+            '<p class="compare-rate">' + pctFmt.format(r.rate) + ' % anual<sup>*</sup></p>' +
+            '<div class="compare-rate-track"><span class="compare-rate-fill" data-target="' + ratePct.toFixed(1) + '" style="background:' + fillBg + '"></span></div>' +
           '</div>' +
-          '<p class="bar-gain">+' + euroFmt.format(r.gain) + '</p>' +
         '</div>' +
-        '<div class="bar-track"><span class="bar-fill" data-target="' + pct.toFixed(1) + '" style="background:' + fillBg + '"></span></div>' +
+        '<div class="compare-periods">' + periods + '</div>' +
       '</div>'
     );
   }).join('');
 
   requestAnimationFrame(function () {
     requestAnimationFrame(function () {
-      el.querySelectorAll('.bar-fill').forEach(function (f) {
+      el.querySelectorAll('.compare-rate-fill').forEach(function (f) {
         f.style.width = f.getAttribute('data-target') + '%';
       });
     });
   });
 
-  document.getElementById('bars-note').textContent =
-    'Ganancia estimada sobre ' + euroFmt.format(amount) + ' en ' + years + (years === 1 ? ' año' : ' años');
-}
-
-/* ---- Tabla de detalle ---- */
-function renderTable(amount) {
-  document.getElementById('table-body').innerHTML = ASSETS.map(function (asset) {
-    var rate = state.rates[asset.key];
-    var isBrand = asset.icon === 'brand';
-    var iconHtml = isBrand ? ReentalIcons.brandMark(14) : ReentalIcons.icon(asset.icon);
-    var iconClass = 'td-icon';
-    var cells = TABLE_YEARS.map(function (years) {
-      return '<td>+' + euroFmt.format(gain(amount, rate, years)) + '</td>';
-    }).join('');
-    return (
-      '<tr' + (asset.highlight ? ' class="highlight"' : '') + '>' +
-        '<td><span class="td-row"><span class="td-asset"><span class="' + iconClass + '" style="--tint:' + asset.tint + ';--ink:' + asset.ink + '">' +
-        iconHtml + '</span>' + asset.label + '</span><span class="pct">' + pctFmt.format(rate) + ' %</span></span></td>' +
-        cells +
-      '</tr>'
-    );
-  }).join('');
-}
-
-/* ---- Panel avanzado: evolución año a año (Chart.js) ---- */
-function renderChartLegend() {
-  var el = document.getElementById('chart-legend');
-  if (!el) return;
-  el.innerHTML = ASSETS.map(function (asset) {
-    var isBrand = asset.icon === 'brand';
-    var iconHtml = isBrand ? ReentalIcons.brandMark(13) : ReentalIcons.icon(asset.icon);
-    var iconClass = 'chart-legend-icon';
-    return '<span class="chart-legend-item"><span class="' + iconClass + '" style="--tint:' + asset.tint + ';--ink:' + asset.ink + '">' +
-      iconHtml + '</span>' + asset.label + '</span>';
-  }).join('');
-}
-
-function renderChart(amount) {
-  var datasets = ASSETS.map(function (asset) {
-    var rate = state.rates[asset.key];
-    var lineColor = asset.icon === 'brand' ? '#F49300' : asset.ink;
-    return {
-      label: asset.label,
-      data: CHART_YEARS.map(function (y) { return gain(amount, rate, y); }),
-      borderColor: lineColor,
-      backgroundColor: lineColor,
-      borderWidth: asset.highlight ? 3.5 : 1.75,
-      pointRadius: CHART_YEARS.map(function (y) { return y === state.years ? 5 : 0; }),
-      pointBackgroundColor: lineColor,
-      pointBorderColor: '#ffffff',
-      pointBorderWidth: 2,
-      pointHoverRadius: 5,
-      tension: 0.3,
-    };
-  });
-
-  if (state.chart) {
-    state.chart.data.labels = CHART_YEARS.map(function (y) { return 'Año ' + y; });
-    state.chart.data.datasets = datasets;
-    state.chart.update();
-  } else {
-    state.chart = new Chart(document.getElementById('chart'), {
-      type: 'line',
-      data: { labels: CHART_YEARS.map(function (y) { return 'Año ' + y; }), datasets: datasets },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#ffffff',
-            borderColor: 'rgba(20,24,31,.12)',
-            borderWidth: 1,
-            padding: 12,
-            cornerRadius: 10,
-            titleColor: '#666F7E',
-            bodyColor: '#14181F',
-            titleFont: { family: 'Fustat', size: 11.5, weight: '700' },
-            bodyFont: { family: 'Fustat', size: 12.5, weight: '600' },
-            callbacks: {
-              label: function (ctx) { return ctx.dataset.label + ': +' + euroFmt.format(ctx.parsed.y); },
-            },
-          },
-        },
-        scales: {
-          x: {
-            grid: { display: false },
-            border: { color: 'rgba(20,24,31,.12)' },
-            ticks: { color: '#666F7E', font: { family: 'Fustat', size: 11.5, weight: '600' } },
-          },
-          y: {
-            grid: { color: 'rgba(20,24,31,.07)' },
-            border: { display: false },
-            ticks: {
-              color: '#666F7E',
-              font: { family: 'Fustat', size: 11.5, weight: '600' },
-              callback: function (v) { return euroFmt.format(v); },
-            },
-          },
-        },
-      },
-    });
-  }
-
-  renderChartLegend();
+  document.getElementById('compare-note').textContent =
+    'Ganancia estimada sobre ' + euroFmt.format(amount) + ' · interés compuesto';
 }
 
 /* ---- Sincronización de controles de importe ---- */
@@ -306,9 +217,7 @@ function update() {
 
   var results = computeResults(amount, state.years);
   renderHero(amount, state.years, results);
-  renderBars(amount, state.years, results);
-  renderTable(amount);
-  if (state.chartOpen) renderChart(amount);
+  renderCompare(amount, state.years, results);
 }
 
 function debounce(fn, ms) {
@@ -371,23 +280,10 @@ document.getElementById('step1-next').addEventListener('click', function () {
 
   goToStep(2);
 
-  /* Vuelve a pintar las barras para que la animación de crecimiento se
+  /* Vuelve a pintar el comparativo para que la animación de crecimiento se
      vea justo al revelar el resultado, en vez de haber ocurrido ya en
      segundo plano mientras el usuario completaba el paso anterior. */
-  renderBars(amount, state.years, computeResults(amount, state.years));
-});
-
-document.getElementById('advanced-toggle').addEventListener('click', function () {
-  var box = document.getElementById('chart-box');
-  var label = document.getElementById('toggle-label');
-  state.chartOpen = !state.chartOpen;
-  this.setAttribute('aria-expanded', state.chartOpen ? 'true' : 'false');
-  box.hidden = !state.chartOpen;
-  if (label) label.textContent = state.chartOpen ? 'Ocultar evolución año a año' : 'Ver evolución año a año';
-  if (state.chartOpen) {
-    var amount = parseAmount(document.getElementById('amount-input').value);
-    if (amount !== null) renderChart(amount);
-  }
+  renderCompare(amount, state.years, computeResults(amount, state.years));
 });
 
 fetchRates().then(function (rates) {

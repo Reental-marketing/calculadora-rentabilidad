@@ -328,7 +328,7 @@ html,body{
 .cta-primary:hover{background:var(--gd)}
 .cta-primary:active{transform:scale(.98)}
 .btn-icon{display:inline-flex;align-items:center;line-height:0}
-.cta-primary svg,.advanced-toggle svg{display:block;width:17px;height:17px}
+.cta-primary svg{display:block;width:17px;height:17px}
 
 /* ---- Encabezados de sección ---- */
 .section-head{
@@ -342,27 +342,32 @@ html,body{
 .section-head h2{font-size:1.3rem;font-weight:800;letter-spacing:-.015em;color:var(--ink-900)}
 .section-note{font-size:13px;font-weight:600;color:var(--ink-500)}
 
-/* ---- Barras comparativas ---- */
-.bars-section{margin-bottom:24px}
-.bars{display:flex;flex-direction:column;gap:12px}
+/* ---- Comparativa por plazo (identidad + interés compuesto en tabla) ---- */
+.compare-section{margin-bottom:24px}
+.compare-rows{display:flex;flex-direction:column;gap:12px}
 
-.bar-row{
+.compare-row{
   background:var(--surface);
   border:1.5px solid var(--line);
   border-radius:var(--radius-md);
   padding:16px 18px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:16px 22px;
   animation:rise .32s var(--ease) both;
   transition:border-color .18s var(--ease),box-shadow .18s var(--ease);
   box-shadow:var(--shadow-sm);
 }
-.bar-row.highlight{
+.compare-row.highlight{
   border-color:rgba(244,147,0,.5);
   background:linear-gradient(180deg,#FFFDF9,#FFF7E9);
 }
 
-.bar-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+/* Bloque de identidad: icono, nombre, badge, rentabilidad media y su barra */
+.compare-id{display:flex;align-items:flex-start;gap:12px;flex:1 1 210px;min-width:200px}
 
-.bar-icon{
+.compare-icon{
   width:42px;height:42px;
   border-radius:12px;
   display:grid;
@@ -371,11 +376,11 @@ html,body{
   background:var(--tint);
   color:var(--ink);
 }
-.bar-icon svg{width:22px;height:22px;display:block}
-.bar-icon svg[aria-label="Reental"]{height:auto} /* el logo real (846x973) no es cuadrado: se deforma si se fuerza a 22x22 */
+.compare-icon svg{width:22px;height:22px;display:block}
+.compare-icon svg[aria-label="Reental"]{height:auto} /* el logo real (846x973) no es cuadrado: se deforma si se fuerza a 22x22 */
 
-.bar-info{flex:1;min-width:120px}
-.bar-name{
+.compare-info{flex:1;min-width:0}
+.compare-name{
   font-size:15.5px;
   font-weight:800;
   color:var(--ink-900);
@@ -384,7 +389,7 @@ html,body{
   gap:8px;
   flex-wrap:wrap;
 }
-.bar-badge{
+.compare-badge{
   font-size:11px;
   font-weight:700;
   color:var(--ink-on-gold);
@@ -392,31 +397,54 @@ html,body{
   padding:3px 9px;
   border-radius:var(--radius-pill);
 }
-.bar-rate{font-size:13px;font-weight:600;color:var(--ink-500);margin-top:2px}
+.compare-rate{font-size:13px;font-weight:600;color:var(--ink-500);margin-top:2px}
+.compare-rate sup{font-size:10px;font-weight:700;margin-left:1px}
 
-.bar-gain{
-  font-size:17px;
-  font-weight:800;
-  color:var(--ink-900);
-  font-variant-numeric:tabular-nums;
-  margin-left:auto;
-  white-space:nowrap;
-}
-.bar-row.highlight .bar-gain{color:var(--ink-900)}
-
-.bar-track{
-  height:10px;
+.compare-rate-track{
+  margin-top:9px;
+  width:100%;
+  max-width:150px;
+  height:6px;
   background:var(--surface-soft);
   border-radius:var(--radius-pill);
   overflow:hidden;
 }
-.bar-fill{
+.compare-rate-fill{
   display:block;
   height:100%;
   width:0%;
   border-radius:var(--radius-pill);
   transition:width .9s var(--ease);
 }
+
+/* Bloque de tabla: importe por plazo, sin barras */
+.compare-periods{
+  flex:2 1 260px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px 8px;
+}
+.compare-period{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  padding:8px 4px;
+  border-radius:8px;
+  transition:background .18s var(--ease);
+}
+.compare-period.is-selected{background:rgba(244,147,0,.08)}
+.compare-period-label{font-size:11px;font-weight:700;color:var(--ink-500)}
+.compare-period-value{font-size:13.5px;font-weight:800;color:var(--ink-900);font-variant-numeric:tabular-nums}
+.compare-period.is-selected .compare-period-value{color:var(--gd)}
+
+.rates-disclaimer{
+  font-size:12.5px;
+  color:var(--ink-500);
+  line-height:1.6;
+  margin-bottom:18px;
+}
+.rates-disclaimer strong{color:var(--ink-700);font-weight:700}
 
 /* ---- Franja de confianza ---- */
 .trust-strip{
@@ -444,109 +472,7 @@ html,body{
 .trust-item strong{display:block;font-size:16.5px;font-weight:800;color:var(--ink-900);letter-spacing:-.01em}
 .trust-item div span{display:block;font-size:12.5px;color:var(--ink-500);line-height:1.35;margin-top:1px}
 
-/* ---- Tabla ---- */
-.table-section{margin-bottom:24px}
-.table-scroll{
-  overflow-x:auto;
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-sm);
-}
-table{width:100%;border-collapse:collapse;min-width:600px}
-
-thead th{
-  font-size:13px;
-  font-weight:700;
-  color:var(--ink-500);
-  text-align:right;
-  padding:16px 20px 12px;
-  border-bottom:1px solid var(--line);
-}
-thead th:first-child{text-align:left}
-
-tbody td{
-  padding:14px 20px;
-  text-align:right;
-  font-size:15.5px;
-  font-weight:800;
-  font-variant-numeric:tabular-nums;
-  color:var(--ink-900);
-  border-bottom:1px solid var(--line);
-  white-space:nowrap;
-}
-tbody tr:last-child td{border-bottom:0}
-tbody td:first-child{
-  text-align:left;
-  font-size:14px;
-  font-weight:700;
-  color:var(--ink-700);
-}
-tbody tr.highlight{background:rgba(244,147,0,.06)}
-tbody tr.highlight td{color:var(--ink-900)}
-tbody tr.highlight td:first-child{color:var(--ink-900)}
-
-.td-row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%}
-.td-asset{display:inline-flex;align-items:center;gap:9px}
-.td-icon{
-  width:24px;height:24px;
-  border-radius:7px;
-  display:inline-grid;
-  place-items:center;
-  background:var(--tint);
-  color:var(--ink);
-  flex-shrink:0;
-}
-.td-icon svg{width:14px;height:14px;display:block}
-.td-icon svg[aria-label="Reental"]{height:auto}
-td .pct{font-size:12px;font-weight:600;color:var(--ink-500);margin-left:6px}
-
-/* ---- Panel avanzado (evolución) ---- */
-.chart-section{margin-bottom:28px}
-.advanced-toggle{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  width:100%;
-  background:var(--surface);
-  border:1.5px dashed var(--line-strong);
-  border-radius:var(--radius-md);
-  padding:14px;
-  color:var(--ink-700);
-  font-family:var(--f);
-  font-size:14.5px;
-  font-weight:700;
-  cursor:pointer;
-  transition:border-color .16s var(--ease),color .16s var(--ease);
-}
-.advanced-toggle:hover{border-color:var(--gold);color:var(--ink-900)}
-.advanced-toggle svg{transition:transform .2s var(--ease)}
-.advanced-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
-
-.chart-box{
-  position:relative;
-  height:340px;
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:var(--radius-lg);
-  padding:20px;
-  margin-top:14px;
-  box-shadow:var(--shadow-sm);
-}
-.chart-box[hidden]{display:none}
-.chart-box .section-head{margin-bottom:10px}
-.chart-box canvas{max-height:260px}
-
-.chart-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-bottom:16px}
-.chart-legend-item{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink-700)}
-.chart-legend-icon{
-  width:22px;height:22px;border-radius:7px;
-  display:inline-grid;place-items:center;
-  background:var(--tint);color:var(--ink);flex-shrink:0;
-}
-.chart-legend-icon svg{width:13px;height:13px;display:block}
-.chart-legend-icon svg[aria-label="Reental"]{height:auto}
+.final-cta{text-align:center;margin-bottom:28px}
 
 .disclaimer{
   font-size:13px;
@@ -567,6 +493,7 @@ td .pct{font-size:12px;font-weight:600;color:var(--ink-500);margin-left:6px}
 
 @media (max-width:420px){
   .trust-strip{grid-template-columns:1fr}
+  .compare-periods{grid-template-columns:repeat(2,1fr);row-gap:14px}
 }
 
 @media (max-width:600px){
@@ -574,9 +501,8 @@ td .pct{font-size:12px;font-weight:600;color:var(--ink-500);margin-left:6px}
   .result-compare-grid{grid-template-columns:1fr}
   .input-panel{padding:20px;gap:24px}
   .result-hero{padding:28px 18px}
-  .chart-box{height:280px;padding:14px}
   .qb{padding:12px 14px;font-size:13.5px}
-  .bar-gain{margin-left:0;flex-basis:100%;text-align:left;order:3}
+  .compare-periods{flex-basis:100%}
   .cta-primary{width:100%;justify-content:center}
 }
 

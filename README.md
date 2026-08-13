@@ -45,7 +45,7 @@ Edita `DEFAULT_RATES` en `calc.js`:
 
 ```js
 var DEFAULT_RATES = {
-  reental: 16.25,
+  reental: 16.34,
   alquiler: 6.25,
   rentaFija: 3,
   rentaVariable: 7.5,

@@ -77,12 +77,12 @@
       </a>
     </section>
 
-    <section class="bars-section">
+    <section class="compare-section">
       <div class="section-head">
-        <h2>Compara tus opciones</h2>
-        <span class="section-note" id="bars-note">Ganancia estimada · sin capital inicial</span>
+        <h2>Compara tu rentabilidad por plazo</h2>
+        <span class="section-note" id="compare-note">Ganancia estimada · interés compuesto</span>
       </div>
-      <div id="bars" class="bars"></div>
+      <div id="compare-rows" class="compare-rows"></div>
     </section>
 
     <section class="trust-strip" aria-label="Por qué invertir con Reental">
@@ -100,47 +100,19 @@
       </div>
     </section>
 
-    <section class="table-section">
-      <div class="section-head">
-        <h2>Detalle por periodo</h2>
-        <span class="section-note">Ganancia acumulada en cada plazo</span>
-      </div>
-      <div class="table-scroll">
-        <table id="gains-table">
-          <thead>
-            <tr>
-              <th scope="col">Alternativa</th>
-              <th scope="col">1 año</th>
-              <th scope="col">3 años</th>
-              <th scope="col">5 años</th>
-              <th scope="col">10 años</th>
-            </tr>
-          </thead>
-          <tbody id="table-body"></tbody>
-        </table>
-      </div>
-    </section>
+    <div class="final-cta">
+      <a class="cta-primary" href="https://www.reental.co" target="_blank" rel="noopener">
+        Empezar a invertir <span class="btn-icon" id="cta-arrow-2"></span>
+      </a>
+    </div>
 
-    <section class="chart-section">
-      <button type="button" class="advanced-toggle" id="advanced-toggle" aria-expanded="false" aria-controls="chart-box">
-        <span id="toggle-label">Ver evolución año a año</span> <span class="btn-icon" id="toggle-chevron"></span>
-      </button>
-      <div class="chart-box" id="chart-box" hidden>
-        <div class="section-head">
-          <h2>Evolución año a año</h2>
-          <span class="section-note">Ganancia acumulada · sin capital inicial</span>
-        </div>
-        <div id="chart-legend" class="chart-legend"></div>
-        <canvas id="chart" aria-label="Gráfica comparativa de evolución de la inversión" role="img"></canvas>
-      </div>
-    </section>
+    <p class="rates-disclaimer">* Rentabilidades medias anuales estimadas. <strong>Reental:</strong> TIR (tasa interna de retorno) media histórica ponderada de los proyectos de la plataforma, demostrable. <strong>Resto de alternativas:</strong> medias de mercado orientativas, utilizadas con fines comparativos.</p>
 
     <p class="disclaimer">Estimaciones basadas en rentabilidades históricas/medias. No constituyen rentabilidad garantizada ni asesoramiento financiero.</p>
     </section>
    </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.js"></script>
   <script src="calc.js?v=10"></script>
   <script src="icons.js?v=10"></script>
   <script src="app.js?v=10"></script>
