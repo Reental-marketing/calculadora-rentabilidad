@@ -8,8 +8,9 @@ iframe en reental.co.
 El flujo está pensado para inversores de cualquier nivel: primero se pregunta
 importe y plazo, y el resultado se muestra siempre como una comparativa visual
 (barras) frente a las alternativas, no como una cifra aislada. Diseño en light
-mode con la paleta e iconografía de marca Reental (sin dependencias de iconos
-externos: `icons.js` contiene el logo y los iconos en SVG inline).
+mode con la paleta, el logo real y la iconografía de marca Reental (sin
+dependencias de iconos externos: `icons.js` contiene el logotipo y los iconos
+en SVG inline).
 
 ## Cómo cambiar los porcentajes (admin)
 
@@ -26,7 +27,8 @@ Si el Sheet no responde o un valor no es válido, la calculadora usa los valores
 por defecto definidos en `calc.js` (`DEFAULT_RATES`).
 
 Las cifras de la franja de confianza ("+110M tokenizados", "43K usuarios
-registrados") se actualizan en `TRUST_STATS`, al principio de `app.js`.
+registrados", "6 países") se editan en `TRUST_STATS`, al principio de
+`app.js`.
 
 ## Configuración inicial del Sheet (una sola vez)
 
@@ -55,8 +57,8 @@ var DEFAULT_RATES = {
 ## Desarrollo local
 
 ```bash
-python3 -m http.server        # abrir http://localhost:8000
-node --test test/calc.test.mjs   # ejecutar los tests
+npm start   # equivalente a: python3 -m http.server 8000 → http://localhost:8000
+npm test    # equivalente a: node --test test/calc.test.mjs
 ```
 
 ## Despliegue

@@ -10,7 +10,6 @@
   /* Tono de texto de énfasis sobre fondos claros: tinta oscura de marca
      (Reental Dark), no un dorado oscurecido — evita el matiz marrón. */
   --gold-ink:#1F2937;
-  --grad-text:linear-gradient(90deg,#FFEABB -38.01%,#F49300 105.96%);
 
   /* ---- Colores por alternativa (siempre sobre fondo claro) ---- */
   --green:#16A34A;   --green-l:#4ADE80;
@@ -71,6 +70,62 @@ html,body{
   max-width:760px;
   margin:0 auto;
   padding:32px 20px 56px;
+}
+
+/* ---- Wizard (steps) ---- */
+.step[hidden]{display:none}
+.step{animation:rise .35s var(--ease) both}
+
+.step-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  padding:28px;
+  box-shadow:var(--shadow-sm);
+  margin-bottom:24px;
+}
+
+.step-card .field + .field{margin-top:30px}
+
+.step-hint{
+  margin-top:14px;
+  font-size:13.5px;
+  color:var(--ink-700);
+  line-height:1.5;
+  background:var(--surface-soft);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+}
+
+.step-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:26px}
+.step-actions-single{justify-content:flex-end}
+
+.step-next{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--gold);
+  color:var(--ink-on-gold);
+  font-family:var(--f);
+  font-size:15px;
+  font-weight:800;
+  padding:14px 24px;
+  border:0;
+  border-radius:var(--radius-pill);
+  cursor:pointer;
+  transition:background .18s var(--ease),transform .18s var(--ease);
+}
+.step-next:hover{background:var(--gd)}
+.step-next:active{transform:scale(.98)}
+.step-next svg{width:16px;height:16px;display:block}
+
+.adjust-label{text-align:center;font-size:13px;font-weight:700;color:var(--ink-500);margin-bottom:10px}
+.adjust-bar{margin-bottom:24px}
+
+@media (max-width:600px){
+  .step-card{padding:20px}
+  .step-actions{flex-direction:column-reverse;align-items:stretch}
+  .step-actions .step-next{justify-content:center;width:100%}
 }
 
 /* ---- Hero ---- */
@@ -317,6 +372,7 @@ html,body{
   color:var(--ink);
 }
 .bar-icon svg{width:22px;height:22px;display:block}
+.bar-icon svg[aria-label="Reental"]{height:auto} /* el logo real (846x973) no es cuadrado: se deforma si se fuerza a 22x22 */
 
 .bar-info{flex:1;min-width:120px}
 .bar-name{
@@ -442,6 +498,7 @@ tbody tr.highlight td:first-child{color:var(--ink-900)}
   flex-shrink:0;
 }
 .td-icon svg{width:14px;height:14px;display:block}
+.td-icon svg[aria-label="Reental"]{height:auto}
 td .pct{font-size:12px;font-weight:600;color:var(--ink-500);margin-left:6px}
 
 /* ---- Panel avanzado (evolución) ---- */
@@ -489,6 +546,7 @@ td .pct{font-size:12px;font-weight:600;color:var(--ink-500);margin-left:6px}
   background:var(--tint);color:var(--ink);flex-shrink:0;
 }
 .chart-legend-icon svg{width:13px;height:13px;display:block}
+.chart-legend-icon svg[aria-label="Reental"]{height:auto}
 
 .disclaimer{
   font-size:13px;

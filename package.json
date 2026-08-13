@@ -1,0 +1,16 @@
+{
+  "name": "calculadora-rentabilidad-reental",
+  "version": "1.1.0",
+  "description": "Calculadora de inversión de Reental: compara en segundos cuánto ganarías invirtiendo con Reental frente a alquiler tradicional, renta fija, renta variable, oro y fondos indexados.",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Reental",
+  "homepage": "https://www.reental.co",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "node --test test/calc.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -5,48 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#FAF8F5">
+  <meta name="description" content="Calcula en segundos cuánto puede crecer tu dinero invirtiendo con Reental y compáralo con alquiler tradicional, renta fija, renta variable, oro y fondos indexados.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Calculadora de inversión — Reental">
+  <meta property="og:description" content="Elige un importe y un plazo, y descubre al instante cuánto ganarías invirtiendo con Reental frente a otras alternativas.">
   <title>Calculadora de inversión — Reental</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
   <main class="calculator">
+   <div class="wizard" id="wizard">
 
-    <header class="hero">
-      <p class="eyebrow">Simulador de rentabilidad</p>
-      <h1>Descubre cuánto puede crecer tu dinero</h1>
-      <p class="hero-sub">Elige un importe y un plazo, y compara al instante lo que ganarías invirtiendo con Reental frente a otras alternativas.</p>
-    </header>
+    <!-- Paso 1: importe + plazo -->
+    <section class="step" id="step-1">
+      <header class="hero">
+        <p class="eyebrow">Simulador de rentabilidad</p>
+        <h1>Descubre cuánto puede crecer tu dinero</h1>
+        <p class="hero-sub">Indica cuánto y durante cuánto tiempo quieres invertir, y compara al instante lo que ganarías con Reental frente a otras alternativas.</p>
+      </header>
 
-    <section class="input-panel" aria-label="Parámetros de la simulación">
-      <div class="field amount-field">
-        <label for="amount-input">¿Cuánto quieres invertir?</label>
-        <div class="amount-box">
-          <input id="amount-input" type="text" inputmode="decimal" value="10.000" autocomplete="off" aria-describedby="amount-error">
-          <span class="currency">€</span>
+      <div class="step-card">
+        <div class="field amount-field">
+          <label for="amount-input">¿Cuánto quieres invertir?</label>
+          <div class="amount-box">
+            <input id="amount-input" type="text" inputmode="decimal" value="10.000" autocomplete="off" aria-describedby="amount-error">
+            <span class="currency">€</span>
+          </div>
+          <input id="amount-slider" class="amount-slider" type="range" min="100" max="100000" step="100" value="10000" aria-label="Importe a invertir">
+          <div class="chip-row" id="amount-chips" role="group" aria-label="Importes rápidos">
+            <button type="button" class="chip" data-amount="1000">1.000 €</button>
+            <button type="button" class="chip active" data-amount="10000">10.000 €</button>
+            <button type="button" class="chip" data-amount="25000">25.000 €</button>
+            <button type="button" class="chip" data-amount="50000">50.000 €</button>
+          </div>
+          <p id="amount-error" class="input-error" hidden>Introduce un importe entre 1 € y 99.999.999 €.</p>
         </div>
-        <input id="amount-slider" class="amount-slider" type="range" min="100" max="100000" step="100" value="10000" aria-label="Importe a invertir">
-        <div class="chip-row" id="amount-chips" role="group" aria-label="Importes rápidos">
-          <button type="button" class="chip" data-amount="1000">1.000 €</button>
-          <button type="button" class="chip active" data-amount="10000">10.000 €</button>
-          <button type="button" class="chip" data-amount="25000">25.000 €</button>
-          <button type="button" class="chip" data-amount="50000">50.000 €</button>
-        </div>
-        <p id="amount-error" class="input-error" hidden>Introduce un importe entre 1 € y 99.999.999 €.</p>
-      </div>
 
-      <div class="field period-field">
-        <span class="field-label" id="period-label">¿Durante cuánto tiempo?</span>
-        <div class="period-tabs" role="tablist" aria-labelledby="period-label" id="period-tabs">
-          <button type="button" role="tab" class="qb" data-years="1">1 año</button>
-          <button type="button" role="tab" class="qb active" data-years="3" aria-selected="true">3 años</button>
-          <button type="button" role="tab" class="qb" data-years="5">5 años</button>
-          <button type="button" role="tab" class="qb" data-years="10">10 años</button>
+        <div class="field period-field">
+          <span class="field-label" id="period-label">¿Durante cuánto tiempo quieres invertir?</span>
+          <div class="period-tabs" role="tablist" aria-labelledby="period-label" id="period-tabs">
+            <button type="button" role="tab" class="qb" data-years="1">1 año</button>
+            <button type="button" role="tab" class="qb active" data-years="3" aria-selected="true">3 años</button>
+            <button type="button" role="tab" class="qb" data-years="5">5 años</button>
+            <button type="button" role="tab" class="qb" data-years="10">10 años</button>
+          </div>
+          <p class="step-hint">La mayoría de inversores elige entre 3 y 5 años para equilibrar liquidez y el efecto del interés compuesto.</p>
+        </div>
+
+        <div class="step-actions step-actions-single">
+          <button type="button" class="step-next" id="step1-next">Ver mi resultado <span class="btn-icon" id="step1-arrow"></span></button>
         </div>
       </div>
     </section>
+
+    <!-- Paso 2: resultado completo, con importe/plazo ya editables para comparar -->
+    <section class="step" id="step-2" hidden>
+      <p class="adjust-label">Ajusta el importe o el plazo para comparar otros escenarios</p>
+      <div class="input-panel adjust-bar" id="adjust-bar"></div>
 
     <section class="result-hero" id="result-hero" aria-live="polite">
       <img class="result-token" src="https://cdn.prod.website-files.com/64883b1804f368bf8575ed2e/69d8d4d2b12e9251f87481a9_Token_Animado.gif" alt="" width="64" height="64" loading="lazy">
@@ -118,11 +136,13 @@
     </section>
 
     <p class="disclaimer">Estimaciones basadas en rentabilidades históricas/medias. No constituyen rentabilidad garantizada ni asesoramiento financiero.</p>
+    </section>
+   </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.js"></script>
-  <script src="calc.js?v=8"></script>
-  <script src="icons.js?v=8"></script>
-  <script src="app.js?v=8"></script>
+  <script src="calc.js?v=10"></script>
+  <script src="icons.js?v=10"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>

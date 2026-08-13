@@ -98,6 +98,7 @@ function computeResults(amount, years) {
 function renderStaticIcons() {
   document.getElementById('cta-arrow').innerHTML = ReentalIcons.icon('arrow');
   document.getElementById('toggle-chevron').innerHTML = ReentalIcons.icon('chevron');
+  document.getElementById('step1-arrow').innerHTML = ReentalIcons.icon('arrow');
 
   TRUST_STATS.forEach(function (stat, i) {
     var el = document.getElementById('trust-icon-' + (i + 1));
@@ -344,6 +345,36 @@ document.getElementById('period-tabs').addEventListener('click', function (e) {
     b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
   });
   update();
+});
+
+/* ---- Wizard: 2 pasos (importe + plazo → resultado editable) ---- */
+function goToStep(n) {
+  document.getElementById('step-1').hidden = n !== 1;
+  document.getElementById('step-2').hidden = n !== 2;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('step1-next').addEventListener('click', function () {
+  var amount = parseAmount(document.getElementById('amount-input').value);
+  var error = document.getElementById('amount-error');
+  if (amount === null) {
+    error.hidden = false;
+    return;
+  }
+  error.hidden = true;
+
+  /* Mueve (no duplica) los campos reales de importe y plazo a la barra de
+     ajuste del paso 2, para que sigan siendo los mismos inputs editables. */
+  var adjustBar = document.getElementById('adjust-bar');
+  adjustBar.appendChild(document.querySelector('.amount-field'));
+  adjustBar.appendChild(document.querySelector('.period-field'));
+
+  goToStep(2);
+
+  /* Vuelve a pintar las barras para que la animación de crecimiento se
+     vea justo al revelar el resultado, en vez de haber ocurrido ya en
+     segundo plano mientras el usuario completaba el paso anterior. */
+  renderBars(amount, state.years, computeResults(amount, state.years));
 });
 
 document.getElementById('advanced-toggle').addEventListener('click', function () {
